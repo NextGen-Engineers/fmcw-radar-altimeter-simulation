@@ -17,14 +17,14 @@ This project models the end-to-end signal chain: chirp synthesis, ground reflect
 ## Technical Q&A (Avionics & Signal Processing Insights)
 
 ### Q1: Why use a Blackman window instead of a standard rectangular (no-window) FFT?
-In FMCW radar, windowing addresses **spectral leakage** caused by taking the Fourier transform of a finite-duration signal:
+In FMCW radar, windowing addresses **spectral leakage** caused by taking the Fourier transform of a finite duration signal:
 * **The Rectangular Window Problem:** A default rectangular window has high sidelobes (the first sidelobe is only **-13 dB** down from the peak). Direct antenna spillover produces a massive signal spike near 0 Hz. If a rectangular window is used, the sidelobes of that spillover will smear across adjacent bins and completely drown out weak ground reflection returns from higher altitudes.
-* **The Blackman Advantage:** A Blackman window drops sidelobes to approximately **-58 dB** down. While it slightly broadens the mainlobe width, this trade-off is essential in avionics to prevent high-amplitude near-field leakage from masking low-amplitude ground echoes.
+* **The Blackman Advantage:** A Blackman window drops sidelobes to approximately **-58 dB** down. While it slightly broadens the mainlobe width, this trade-off is essential in avionics to prevent high amplitude near-field leakage from masking low amplitude ground echoes.
 
 ### Q2: Why is there a spike near zero meters?
 The spike at 0–2 meters represents **direct antenna-to-antenna coupling (spillover / bleedthrough)**:
 * On an aircraft, the transmit (TX) and receive (RX) antennas are physically mounted only a short distance apart on the fuselage belly.
-* A portion of the transmitted RF energy couples directly into the receiver without traveling to the ground. Because the travel distance is virtually zero, its round-trip time (**τ ≈ 0**) results in a beat frequency near 0 Hz.
+* A portion of the transmitted RF energy couples directly into the receiver without traveling to the ground. Because the travel distance is virtually zero, its round trip time (**τ ≈ 0**) results in a beat frequency near 0 Hz.
 * In avionics signal processing, this spike is mitigated using high-pass video filtering, Range-bin masking (**Range > 3 m**), or digital IQ baseline subtraction before peak extraction.
 
 ---
